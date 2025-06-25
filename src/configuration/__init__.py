@@ -14,6 +14,7 @@ class TransportProtocol(Enum):
 
     TCP = "tcp", False
     WS = "websockets", False
+    WSS = "websockets", True
     TLS = "tcp", True
 
 

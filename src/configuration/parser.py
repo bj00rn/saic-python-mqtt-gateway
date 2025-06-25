@@ -94,16 +94,17 @@ def __parse_mqtt_transport(args: Namespace, config: Configuration) -> None:
             config.mqtt_transport_protocol = TransportProtocol.TCP
         elif parse_result.scheme == "ws":
             config.mqtt_transport_protocol = TransportProtocol.WS
+        elif parse_result.scheme == "wss":
+            config.mqtt_transport_protocol = TransportProtocol.WSS
         elif parse_result.scheme == "tls":
             config.mqtt_transport_protocol = TransportProtocol.TLS
-            if args.tls_server_cert_path:
-                config.tls_server_cert_path = args.tls_server_cert_path
-                config.tls_server_cert_check_hostname = (
-                    args.tls_server_cert_check_hostname
-                )
         else:
-            msg = f"Invalid MQTT URI scheme: {parse_result.scheme}, use tcp or ws"
+            msg = f"Invalid MQTT URI scheme: {parse_result.scheme}, use one tcp, ws, wss, tls"
             raise SystemExit(msg)
+
+        if parse_result.scheme.with_tls and args.tls_server_cert_path:
+            config.tls_server_cert_path = args.tls_server_cert_path
+            config.tls_server_cert_check_hostname = args.tls_server_cert_check_hostname
 
         if parse_result.port:
             config.mqtt_port = parse_result.port
@@ -171,6 +172,7 @@ def setup_parser() -> argparse.ArgumentParser:
         help="""The URI to the MQTT Server.
         TCP: tcp://mqtt.eclipseprojects.io:1883
         WebSocket: ws://mqtt.eclipseprojects.io:9001
+        WebSocket secure: wss://mqtt.eclipseprojects.io:9001
         TLS: tls://mqtt.eclipseprojects.io:8883""",
         dest="mqtt_uri",
         required=False,
