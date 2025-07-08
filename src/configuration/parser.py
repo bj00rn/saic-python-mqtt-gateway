@@ -88,29 +88,22 @@ def __setup_mqtt(args: Namespace, config: Configuration) -> None:
 
 
 def __parse_mqtt_transport(args: Namespace, config: Configuration) -> None:
-    if args.mqtt_uri is not None and len(args.mqtt_uri) > 0:
-        parse_result = urllib.parse.urlparse(args.mqtt_uri)
-        if parse_result.scheme == "tcp":
-            config.mqtt_transport_protocol = TransportProtocol.TCP
-        elif parse_result.scheme == "ws":
-            config.mqtt_transport_protocol = TransportProtocol.WS
-        elif parse_result.scheme == "tls":
-            config.mqtt_transport_protocol = TransportProtocol.TLS
-            if args.tls_server_cert_path:
-                config.tls_server_cert_path = args.tls_server_cert_path
-                config.tls_server_cert_check_hostname = (
-                    args.tls_server_cert_check_hostname
-                )
-        else:
-            msg = f"Invalid MQTT URI scheme: {parse_result.scheme}, use tcp or ws"
-            raise SystemExit(msg)
+    if args.mqtt_uri:
+        parse_result: urllib.parse.ParseResult = urllib.parse.urlparse(args.mqtt_uri)
+        try:
+            config.mqtt_transport_protocol = TransportProtocol.from_scheme(
+                parse_result.scheme
+            )
+        except ValueError as ve:
+            raise SystemExit(ve) from ve
 
-        if parse_result.port:
-            config.mqtt_port = parse_result.port
-        elif config.mqtt_transport_protocol == TransportProtocol.TCP:
-            config.mqtt_port = 1883
-        else:
-            config.mqtt_port = 9001
+        if config.mqtt_transport_protocol.with_tls and args.tls_server_cert_path:
+            config.tls_server_cert_path = args.tls_server_cert_path
+            config.tls_server_cert_check_hostname = args.tls_server_cert_check_hostname
+
+        config.mqtt_port = (
+            parse_result.port or config.mqtt_transport_protocol.default_port
+        )
         config.mqtt_host = str(parse_result.hostname)
 
 
@@ -184,7 +177,9 @@ def __add_mqtt_argument_group(
         help="""The URI to the MQTT Server.
                 TCP: tcp://mqtt.eclipseprojects.io:1883
                 WebSocket: ws://mqtt.eclipseprojects.io:9001
-                TLS: tls://mqtt.eclipseprojects.io:8883""",
+                Secure WebSocket: wss://mqtt.eclipseprojects.io:9443
+                TLS: tls://mqtt.eclipseprojects.io:8883
+                Leave it empty to disable MQTT connection.""",
         dest="mqtt_uri",
         required=False,
         action=EnvDefault,

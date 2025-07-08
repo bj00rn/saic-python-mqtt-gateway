@@ -8,13 +8,28 @@ if TYPE_CHECKING:
 
 
 class TransportProtocol(Enum):
-    def __init__(self, transport_mechanism: str, with_tls: bool) -> None:
+    @classmethod
+    def from_scheme(cls, scheme: str) -> TransportProtocol:
+        """Get the TransportProtocol instance by its scheme."""
+        for protocol in cls:
+            if protocol.scheme == scheme:
+                return protocol
+        raise ValueError(
+            f"Unsupported MQTT URI scheme: {scheme}, supported schemes: {', '.join([p.scheme for p in cls])}"
+        )
+
+    def __init__(
+        self, scheme: str, transport_mechanism: str, with_tls: bool, default_port: int
+    ) -> None:
+        self.scheme = scheme
         self.transport_mechanism = transport_mechanism
         self.with_tls = with_tls
+        self.default_port = default_port
 
-    TCP = "tcp", False
-    WS = "websockets", False
-    TLS = "tcp", True
+    TCP = ("tcp", "tcp", False, 1883)
+    WS = ("ws", "websockets", False, 9001)
+    TLS = ("tls", "tcp", True, 8883)
+    WSS = ("wss", "websockets", True, 9443)
 
 
 class Configuration:
