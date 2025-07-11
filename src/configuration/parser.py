@@ -189,7 +189,6 @@ def __add_mqtt_argument_group(
         required=False,
         action=EnvDefault,
         envvar="MQTT_URI",
-        type=str,
     )
     mqtt.add_argument(
         "--mqtt-server-cert",
@@ -198,7 +197,6 @@ def __add_mqtt_argument_group(
         required=False,
         action=EnvDefault,
         envvar="MQTT_SERVER_CERT",
-        type=str,
     )
     mqtt.add_argument(
         "--mqtt-user",
@@ -207,7 +205,6 @@ def __add_mqtt_argument_group(
         required=False,
         action=EnvDefault,
         envvar="MQTT_USER",
-        type=str,
     )
     mqtt.add_argument(
         "--mqtt-password",
@@ -216,7 +213,6 @@ def __add_mqtt_argument_group(
         required=False,
         action=EnvDefault,
         envvar="MQTT_PASSWORD",
-        type=str,
     )
     mqtt.add_argument(
         "--mqtt-client-id",
@@ -226,7 +222,6 @@ def __add_mqtt_argument_group(
         required=False,
         action=EnvDefault,
         envvar="MQTT_CLIENT_ID",
-        type=str,
     )
     mqtt.add_argument(
         "--mqtt-topic-prefix",
@@ -236,7 +231,6 @@ def __add_mqtt_argument_group(
         required=False,
         action=EnvDefault,
         envvar="MQTT_TOPIC",
-        type=str,
     )
     mqtt.add_argument(
         "--mqtt-allow-dots-in-topic",
@@ -278,7 +272,6 @@ def __add_saic_api_argument_group(
         dest="saic_rest_uri",
         required=False,
         action=EnvDefault,
-        type=str,
         envvar="SAIC_REST_URI",
     )
     saic_api.add_argument(
@@ -289,7 +282,6 @@ def __add_saic_api_argument_group(
         required=True,
         action=EnvDefault,
         envvar="SAIC_USER",
-        type=str,
     )
     saic_api.add_argument(
         "-p",
@@ -299,7 +291,6 @@ def __add_saic_api_argument_group(
         required=True,
         action=EnvDefault,
         envvar="SAIC_PASSWORD",
-        type=str,
     )
     saic_api.add_argument(
         "--saic-phone-country-code",
@@ -308,7 +299,6 @@ def __add_saic_api_argument_group(
         required=False,
         action=EnvDefault,
         envvar="SAIC_PHONE_COUNTRY_CODE",
-        type=str,
     )
     saic_api.add_argument(
         "--saic-region",
@@ -318,7 +308,6 @@ def __add_saic_api_argument_group(
         required=False,
         action=EnvDefault,
         envvar="SAIC_REGION",
-        type=str,
     )
     saic_api.add_argument(
         "--saic-tenant-id",
@@ -328,7 +317,6 @@ def __add_saic_api_argument_group(
         required=False,
         action=EnvDefault,
         envvar="SAIC_TENANT_ID",
-        type=str,
     )
     saic_api.add_argument(
         "--battery-capacity-mapping",
@@ -339,7 +327,6 @@ def __add_saic_api_argument_group(
         required=False,
         action=EnvDefault,
         envvar="BATTERY_CAPACITY_MAPPING",
-        type=str,
     )
     saic_api.add_argument(
         "--saic-relogin-delay",
@@ -405,7 +392,6 @@ def __add_openwb_argument_group(
         required=False,
         action=EnvDefault,
         envvar="CHARGING_STATIONS_JSON",
-        type=str,
     )
     return openwb_integration
 
@@ -464,7 +450,6 @@ def __add_abrp_argument_group(
         required=False,
         action=EnvDefault,
         envvar="ABRP_API_KEY",
-        type=str,
     )
     abrp_integration.add_argument(
         "--abrp-user-token",
@@ -475,7 +460,6 @@ def __add_abrp_argument_group(
         required=False,
         action=EnvDefault,
         envvar="ABRP_USER_TOKEN",
-        type=str,
     )
     abrp_integration.add_argument(
         "--publish-raw-abrp-data",
@@ -505,7 +489,6 @@ def add_osmand_argument_group(
         required=False,
         action=EnvDefault,
         envvar="OSMAND_SERVER_URI",
-        type=str,
     )
     osmand_integration.add_argument(
         "--osmand-device-id",
@@ -517,7 +500,6 @@ def add_osmand_argument_group(
         required=False,
         action=EnvDefault,
         envvar="OSMAND_DEVICE_ID",
-        type=str,
     )
     osmand_integration.add_argument(
         "--osmand-use-knots",

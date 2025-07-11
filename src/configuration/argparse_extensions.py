@@ -22,14 +22,11 @@ class ArgumentHelpFormatter(argparse.RawTextHelpFormatter):
             _help = ""
 
         if isinstance(action, EnvDefault):
-            # append type
-            t = action.type
+            # append type, default to string if not set
+            t = action.type if action.type else str
             if t is not None:
-                if (
-                    hasattr(t, "__annotations__")
-                    and t.__annotations__.get("return", None) is not None
-                ):
-                    _help += f"\n(type: {t.__annotations__.get('return', None)})"
+                if hasattr(t, "__annotations__") and t.__annotations__.get("return"):
+                    _help += f"\n(type: {t.__annotations__.get('return')})"
                 elif hasattr(t, "__name__"):
                     _help += f"\n(type: {t.__name__})"
 
