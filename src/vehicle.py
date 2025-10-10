@@ -400,6 +400,7 @@ class VehicleState:
 
     def mark_failed_refresh(self) -> None:
         self.last_failed_refresh = datetime.datetime.now()
+        self.publisher.publish_bool(self.get_topic(mqtt_topics.REFRESH_ERROR), True)
         self.publisher.publish_str(self.get_topic(mqtt_topics.AVAILABLE), "offline")
 
     @property

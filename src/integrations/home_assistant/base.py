@@ -253,3 +253,39 @@ class HomeAssistantDiscoveryBase(metaclass=abc.ABCMeta):
         return self._publish_ha_discovery_message(
             "sensor", name, payload, custom_availability
         )
+
+    def _publish_event(
+        self,
+        topic: str,
+        name: str,
+        enabled: bool = True,
+        entity_category: str | None = None,
+        device_class: str | None = None,
+        state_class: str | None = None,
+        # unit_of_measurement: str | None = None,
+        icon: str | None = None,
+        value_template: str = "{{ value }}",
+        custom_availability: HaCustomAvailabilityConfig | None = None,
+    ) -> str:
+        payload = {
+            "state_topic": self._get_state_topic(topic),
+            "value_template": value_template,
+            "enabled_by_default": enabled,
+        }
+        if entity_category is not None:
+            payload["entity_category"] = entity_category
+        if device_class is not None:
+            payload["device_class"] = device_class
+        if state_class is not None:
+            payload["state_class"] = state_class
+        if icon is not None:
+            payload["icon"] = icon
+
+        payload = {
+            "state_topic": self._get_state_topic(topic),
+            "enabled_by_default": enabled,
+        }
+
+        return self._publish_ha_discovery_message(
+            "event", name, payload, custom_availability
+        )
